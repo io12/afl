@@ -1,18 +1,25 @@
---- qemu-2.10.0-rc3-clean/linux-user/elfload.c	2017-08-15 11:39:41.000000000 -0700
-+++ qemu-2.10.0-rc3/linux-user/elfload.c	2017-08-22 14:33:57.397127516 -0700
-@@ -20,5 +20,11 @@
-
- #define ELF_OSABI   ELFOSABI_SYSV
-
+--- qemu-2.10.0/linux-user/elfload.c	2017-08-30 12:50:41.000000000 -0400
++++ qemu-2.10.0/linux-user/elfload-mod.c	2019-09-27 16:40:24.961892070 -0400
+@@ -2,6 +2,9 @@
+ #include "qemu/osdep.h"
+ #include <sys/param.h>
+ 
 +#include <stdlib.h>
 +#include <stdio.h>
 +
+ #include <sys/resource.h>
+ 
+ #include "qemu.h"
+@@ -20,6 +23,8 @@
+ 
+ #define ELF_OSABI   ELFOSABI_SYSV
+ 
 +extern abi_ulong afl_entry_point, afl_start_code, afl_end_code;
 +
  /* from personality.h */
  
  /*
-@@ -2085,6 +2087,8 @@
+@@ -2085,6 +2090,15 @@
      info->brk = 0;
      info->elf_flags = ehdr->e_flags;
  
@@ -21,20 +28,26 @@
 +        afl_entry_point = strtoul(afl_entry_point_env, NULL, 0x10);
 +        printf("afl_entry_point: %#x\n", afl_entry_point);
 +    }
-+    if (!afl_entry_point) afl_entry_point = info->entry;
++    if (!afl_entry_point) {
++        afl_entry_point = info->entry;
++    }
 +
      for (i = 0; i < ehdr->e_phnum; i++) {
          struct elf_phdr *eppnt = phdr + i;
          if (eppnt->p_type == PT_LOAD) {
-@@ -2118,9 +2122,11 @@
+@@ -2118,9 +2132,15 @@
              if (elf_prot & PROT_EXEC) {
                  if (vaddr < info->start_code) {
                      info->start_code = vaddr;
-+                    if (!afl_start_code) afl_start_code = vaddr;
++                    if (!afl_start_code) {
++                        afl_start_code = vaddr;
++                    }
                  }
                  if (vaddr_ef > info->end_code) {
                      info->end_code = vaddr_ef;
-+                    if (!afl_end_code) afl_end_code = vaddr_ef;
++                    if (!afl_end_code) {
++                        afl_end_code = vaddr_ef;
++                    }
                  }
              }
              if (elf_prot & PROT_WRITE) {
