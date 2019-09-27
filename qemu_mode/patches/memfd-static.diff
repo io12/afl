@@ -1,0 +1,11 @@
+--- qemu-2.10.0/util/memfd.c	2017-08-30 12:50:41.000000000 -0400
++++ qemu-2.10.0/util/memfd-mod.c	2019-09-27 16:15:47.181050072 -0400
+@@ -37,7 +37,7 @@
+ #include <sys/syscall.h>
+ #include <asm/unistd.h>
+ 
+-static int memfd_create(const char *name, unsigned int flags)
++int memfd_create(const char *name, unsigned int flags)
+ {
+ #ifdef __NR_memfd_create
+     return syscall(__NR_memfd_create, name, flags);
