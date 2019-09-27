@@ -56,19 +56,6 @@ if [ ! -f "../afl-showmap" ]; then
 fi
 
 
-for i in libtool wget python automake autoconf sha384sum bison iconv; do
-
-  T=`which "$i" 2>/dev/null`
-
-  if [ "$T" = "" ]; then
-
-    echo "[-] Error: '$i' not found, please install first."
-    exit 1
-
-  fi
-
-done
-
 if [ ! -d "/usr/include/glib-2.0/" -a ! -d "/usr/local/include/glib-2.0/" ]; then
 
   echo "[-] Error: devel version of 'glib2' not found, please install first."
