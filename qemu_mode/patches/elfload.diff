@@ -1,6 +1,6 @@
 --- qemu-2.10.0-rc3-clean/linux-user/elfload.c	2017-08-15 11:39:41.000000000 -0700
 +++ qemu-2.10.0-rc3/linux-user/elfload.c	2017-08-22 14:33:57.397127516 -0700
-@@ -20,6 +20,8 @@
+@@ -20,4 +20,9 @@
 
  #define ELF_OSABI   ELFOSABI_SYSV
 
@@ -10,7 +10,7 @@
 +extern abi_ulong afl_entry_point, afl_start_code, afl_end_code;
 +
  /* from personality.h */
-
+ //
  /*
 @@ -2085,6 +2087,8 @@
      info->brk = 0;
