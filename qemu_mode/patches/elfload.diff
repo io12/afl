@@ -1,18 +1,26 @@
 --- qemu-2.10.0-rc3-clean/linux-user/elfload.c	2017-08-15 11:39:41.000000000 -0700
 +++ qemu-2.10.0-rc3/linux-user/elfload.c	2017-08-22 14:33:57.397127516 -0700
 @@ -20,6 +20,8 @@
- 
+
  #define ELF_OSABI   ELFOSABI_SYSV
- 
+
++#include <stdlib.h>
++#include <stdio.h>
++
 +extern abi_ulong afl_entry_point, afl_start_code, afl_end_code;
 +
  /* from personality.h */
- 
+
  /*
 @@ -2085,6 +2087,8 @@
      info->brk = 0;
      info->elf_flags = ehdr->e_flags;
- 
+
++    char *afl_entry_point_env = getenv("AFL_ENTRY_POINT");
++    if (afl_entry_point_env) {
++        afl_entry_point = strtoul(afl_entry_point_env, NULL, 0x10);
++        printf("afl_entry_point: %#x\n", afl_entry_point);
++    }
 +    if (!afl_entry_point) afl_entry_point = info->entry;
 +
      for (i = 0; i < ehdr->e_phnum; i++) {
