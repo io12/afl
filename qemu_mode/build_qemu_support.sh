@@ -16,7 +16,7 @@
 #
 # This script downloads, patches, and builds a version of QEMU with
 # minor tweaks to allow non-instrumented binaries to be run under
-# afl-fuzz. 
+# afl-fuzz.
 #
 # The modifications reside in patches/*. The standalone QEMU binary
 # will be written to ../afl-qemu-trace.
@@ -139,7 +139,8 @@ echo "[+] Patching done."
 
 CFLAGS="-O3 -ggdb" ./configure --disable-system \
   --enable-linux-user --disable-gtk --disable-sdl --disable-vnc \
-  --target-list="${CPU_TARGET}-linux-user" --enable-pie --enable-kvm || exit 1
+  --target-list="${CPU_TARGET}-linux-user" --enable-pie --enable-kvm \
+  --python=/usr/bin/python2 || exit 1
 
 echo "[+] Configuration complete."
 
